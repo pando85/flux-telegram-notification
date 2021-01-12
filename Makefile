@@ -3,12 +3,11 @@
 APP := forwarder
 WORKON_HOME ?= .venv
 VENV_BASE := $(WORKON_HOME)/${APP}
-VENV_ACTIVATE := $(VENV_BASE)/bin/activate
 PYTHON := ${VENV_BASE}/bin/python3
 
 CONTAINER_CMD?=docker
 
-IMAGE_NAME=$(if $(ENV_IMAGE_NAME),$(ENV_IMAGE_NAME),pando85/alertmanager-telegram-forwarder)
+IMAGE_NAME=$(if $(ENV_IMAGE_NAME),$(ENV_IMAGE_NAME),pando85/flux-telegram-notification)
 IMAGE_VERSION=$(if $(ENV_IMAGE_VERSION),$(ENV_IMAGE_VERSION),latest)
 
 # get build server architecture

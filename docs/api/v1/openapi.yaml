@@ -1,17 +1,17 @@
 openapi: 3.0.0
 info:
-  title: Alertmanager Telegram forwarder
-  version: '1.0.0'
+  title: Flux Telegram Notification
+  version: '0.1.0'
   license:
     name: "GPL-3.0"
     url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
 servers:
   - url: "/v1"
 paths:
-  /alerts/{chat_id}:
+  /event/{chat_id}:
     post:
-      description: Forward alerts to Telegram
-      operationId: forwarder.handlers.forward_alerts
+      description: Forward events to Telegram
+      operationId: forwarder.handlers.forward_event
       parameters:
         - name: chat_id
           in: path
@@ -20,19 +20,19 @@ paths:
           schema:
             type: integer
       requestBody:
-        description: alerts to forward
+        description: event to forward
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/alerts"
+              $ref: "#/components/schemas/event"
       responses:
         '200':
           description: forwarder correctly
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/alerts"
+                $ref: "#/components/schemas/event"
         default:
           description: unexpected error
           content:
@@ -52,68 +52,53 @@ paths:
       - ping
 components:
   schemas:
-    alerts:
+    event:
       type: object
       required:
-        - alerts
-        - externalURL
-        - receiver
-        - status
-        - version
+        - involvedObject
+        - severity
+        - timestamp
+        - message
+        - reason
+        - reportingController
       properties:
-        alerts:
-          type: array
-          items:
-            $ref: "#/components/schemas/alert"
-        commonAnnotations:
-          $ref: "#/components/schemas/labelSet"
-        commonLabels:
-          $ref: "#/components/schemas/labelSet"
-        externalURL:
+        involvedObject:
+          $ref: "#/components/schemas/involvedObject"
+        severity:
           type: string
-          format: uri
-        groupKey:
-          type: string
-        groupLabels:
-          $ref: "#/components/schemas/labelSet"
-        receiver:
-          type: string
-        status:
-          type: string
-          enum: [resolved, firing]
-        version:
-          type: string
-    alert:
-      type: object
-      required:
-        - annotations
-        - endsAt
-        - labels
-        - startsAt
-        - status
-      properties:
-        annotations:
-          $ref: "#/components/schemas/labelSet"
-        endsAt:
+          enum: [info, error]
+        timestamp:
           type: string
           format: date-time
-        fingerprint:
+        message:
           type: string
-        generatorURL:
+        reason:
           type: string
-          format: uri
-        labels:
-          $ref: "#/components/schemas/labelSet"
-        startsAt:
+        reportingController:
           type: string
-          format: date-time
-        status:
+        reportingInstance:
           type: string
-          enum: [resolved, firing]
-    labelSet:
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+    involvedObject:
       type: object
-      additionalProperties:
-        type: string
+      properties:
+        kind:
+          type: string
+        namespace:
+          type: string
+        name:
+          type: string
+        uid:
+          type: string
+        apiVersion:
+          type: string
+        resourceVersion:
+          type: string
+        fieldPath:
+          type: string
     Error:
       type: object
       required:

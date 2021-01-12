@@ -5,25 +5,20 @@ from aiohttp import web
 
 from forwarder.errors import ResponseError
 
-from forwarder.typing import Alerts
+from forwarder.typing import Event
 
 DATA_PATH = 'test/data'
 
 
 @pytest.fixture
-def alerts_all_ok_dict():
-    with open(f'{DATA_PATH}/all_ok.json', 'r') as json_data:
+def event_dict():
+    with open(f'{DATA_PATH}/event.json', 'r') as json_data:
         return json.load(json_data)
 
 
 @pytest.fixture
-def alerts_all_ok(alerts_all_ok_dict):
-    return Alerts.from_dict(alerts_all_ok_dict)
-
-
-@pytest.fixture
-def alert_ok(alerts_all_ok):
-    return alerts_all_ok.alerts[0]
+def event(event_dict):
+    return Event.from_dict(event_dict)
 
 
 @pytest.fixture

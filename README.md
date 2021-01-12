@@ -1,6 +1,6 @@
-# alertmanager-telegram-forwarder [![Build Status](https://travis-ci.org/pando85/alertmanager-telegram-forwarder.svg?branch=master)](https://travis-ci.org/pando85/alertmanager-telegram-forwarder)  [![](https://images.microbadger.com/badges/image/pando85/alertmanager-telegram-forwarder.svg)](https://cloud.docker.com/repository/docker/pando85/alertmanager-telegram-forwarder) [![](https://images.microbadger.com/badges/version/pando85/alertmanager-telegram-forwarder.svg)](https://cloud.docker.com/repository/docker/pando85/alertmanager-telegram-forwarder) [![License](https://img.shields.io/github/license/pando85/alertmanager-telegram-forwarder.svg)](https://github.com/pando85/alertmanager-telegram-forwarder/blob/master/LICENSE)
+# flux-telegram-notification [![Build Status](https://travis-ci.org/pando85/flux-telegram-notification.svg?branch=master)](https://travis-ci.org/pando85/flux-telegram-notification)  [![](https://images.microbadger.com/badges/image/pando85/flux-telegram-notification.svg)](https://cloud.docker.com/repository/docker/pando85/flux-telegram-notification) [![](https://images.microbadger.com/badges/version/pando85/flux-telegram-notification.svg)](https://cloud.docker.com/repository/docker/pando85/flux-telegram-notification) [![License](https://img.shields.io/github/license/pando85/flux-telegram-notification.svg)](https://github.com/pando85/flux-telegram-notification/blob/master/LICENSE)
 
-Alertmanager webhook to forward notifications to telegram using templates and based in [OpenAPI specs](docs/api/v1/openapi.yaml).
+Flux notification webhook to forward notifications to Telegram using templates and based in [OpenAPI specs](docs/api/v1/openapi.yaml).
 
 ## Config
 
@@ -13,15 +13,17 @@ Alertmanager webhook to forward notifications to telegram using templates and ba
 
 ### Alertmanager
 
-Must set up a [webhook_config](https://prometheus.io/docs/alerting/configuration/#webhook_config) in `alertmanager.yml`. Replace `{CHAT_ID}` with a desired Telegram chat ID.
+Must set up a [provider](https://toolkit.fluxcd.io/components/notification/provider/#generic-webhook). Replace `{CHAT_ID}` with a desired Telegram chat ID.
 
 ```yaml
-receivers:
-- name: telegram
-  webhook_configs:
-  - send_resolved: true
-    http_config: {}
-    url: http://alertmanager-telegram-forwarder:8080/v1/alerts/{CHAT_ID}
+apiVersion: notification.toolkit.fluxcd.io/v1beta1
+kind: Provider
+metadata:
+  name: flux-telegram-notification
+  namespace: flux-system
+spec:
+  type: generic
+  address: http://flux-telegram-notification:8080/v1/event/{CHAT_ID}
 ```
 
 You can contact with [@myidbot](https://telegram.me/myidbot) to get your current chat ID.

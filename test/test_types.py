@@ -1,6 +1,6 @@
-from forwarder.typing import Alert, Alerts
+from forwarder.typing import InvolvedObject, Event
 
 
-def test_alerts(alerts_all_ok):
-    assert isinstance(alerts_all_ok, Alerts)
-    assert all([isinstance(alert, Alert) for alert in alerts_all_ok.alerts])
+def test_event(event):
+    assert isinstance(event, Event)
+    assert isinstance(event.involvedObject, InvolvedObject)

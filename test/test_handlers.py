@@ -19,10 +19,10 @@ def cli(loop, aiohttp_client, fake_telegram_cli):
     return loop.run_until_complete(aiohttp_client(app.app))
 
 
-async def test_forward_alerts(cli, chat_id, alerts_all_ok_dict):
-    resp = await cli.post(f'{BASE_URL}/alerts/{chat_id}', json=alerts_all_ok_dict)
+async def test_forward_event(cli, chat_id, event_dict):
+    resp = await cli.post(f'{BASE_URL}/event/{chat_id}', json=event_dict)
     assert resp.status == 200
-    assert await resp.json() == alerts_all_ok_dict
+    assert await resp.json() == event_dict
 
 
 async def test_ping(cli):

@@ -6,7 +6,7 @@ from toolz import curry
 
 from forwarder.config import TELEGRAM_BOT_TOKEN
 from forwarder.format import get_message
-from forwarder.typing import Alerts, Maybe
+from forwarder.typing import Event, Maybe
 from forwarder.errors import ResponseError
 
 
@@ -28,14 +28,13 @@ async def setup_telegram_client(telegram_url: str,
 
 
 @bind
-async def send_alerts(client: Callable, chat_id: int, alerts: Alerts) -> Maybe[Alerts]:
-    for alert in alerts.alerts:
-        message = {
-            'chat_id': chat_id,
-            'text': get_message(alert),
-            'parse_mode': 'Markdown',
-        }
-        maybe_message = await client(message)
-        if isinstance(maybe_message, ResponseError):
-            return maybe_message
-    return alerts
+async def send_event(client: Callable, chat_id: int, event: Event) -> Maybe[Event]:
+    message = {
+        'chat_id': chat_id,
+        'text': get_message(event),
+        'parse_mode': 'Markdown',
+    }
+    maybe_message = await client(message)
+    if isinstance(maybe_message, ResponseError):
+        return maybe_message
+    return event

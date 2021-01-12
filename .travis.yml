@@ -8,7 +8,7 @@ services:
 
 language: python
 python:
-  - '3.7'
+  - '3.9'
 
 cache: pip
 before_cache:
@@ -34,8 +34,7 @@ jobs:
       script:
         - bash .ci/tag_version.sh
       env:
-        secure: "MEMH5LAQzxTPypstpGXwqH3wNxgyH9FWd2JhxNnGg730Pw7GtK+QkMexTzzoJCiXmYelbJHD+xeE5IQGprd6OU3/3+p/7fC6XD2hcNyA/IRJFLAdvto/wzGdCRx+BGxqpkyaKxWdrVds9LXtlSrWSUJ6kFeg4uUm2m19BEBZFH5nFpapDQILouLfIbWMN0JCXHhCEoTQVe1N5IqTONXwUBc9UgvVb8UNHlvJv8P2Hg3ckuE0aWbx6lS+fyKN0zOgJrA6Lolrm+M2eYoI3dZVcqdFpBqwPTCF3H6/JKYJnVeGXjKtDbZMd1F8JWNVCvFXLuHqZ1rCnYkNHzZDo8lHL79kzzQ1vZaQ0C6FKagmc3Skc2snddDuRNDeg2xN5QbM4aUquSWHtF3o+USAMjVkANCIZMGhAfpFdmwu4yU8K4DmMy0yG0589nt2we/HdJcbDIxCejPRtvfsUY0aY2rXyBIG82NovCSAzZGIoqSGZI0vrLNrKTtnGNmOb6gff9jdDBk0yY2ejoET9D8nAt1TpNFKMJz6y7skFbf5RQsnGo3SQ4nDIg1kWgSmTEAIrMBqZUGxBCbHwCYMQUhhg2XbTIYWM9KElo2PoH+PQx5ZNYIWvGeZP7gYx9JhmbgD2mAHhUoobCpKNuC4gKXuJydqAo6TpyaRdYaM+VCZMiITqPE="
-
+        secure: "FVguRdfZcMWN5SQy7/sK/QAXFsErlIfNsU4E0bsKhUBvbLdL2TTZfkudRWx9tYldfZRqnBWgc11+1QN3Hzl813Lutf+IoUQG1HrLcF9xS46qqyz8jOOAfrj7ZS+rx7p8m9QzpLqRW30uzdHKKBGeTxODvM3/mjjDny6DCS6U/1yyUT7juTsc2FImjIP88IKfIx84i8ZIQ6K2Fsb2JYOzxH+dsPxrxvAy6CtAIAkaHFIUuEeVbpbPgdIZBhsaMwuQzFJnsjclm15yiokwAitrOEJ+s/gzyvy0iXUs1rz/G9jaWy/6mjy/gcSKYUOzk7kze+gAlrTEyhzWkkOk8z5K8CV0YKIZLaBZKUUjKi57dosMR/ALSMV3+4n/yD2OcKypQcHIJRiMgt62bW/Zmw0fQhhOCojTxvksvKaG4EJdnZ+F7YOU+2/e1Vc8uYa3JZl5473s03pE9celr6wLEUgrAXD4APRIyoH/8olcJIdZAUQ6sFiQa9okSgB9rSniz3Rc/S+bYThiL5/zZstJXjdS1+YJk9iDfB3JqidMK7IXZvTj8H9ywGeIsifM/Heo73Wqba7QjtMWWuI0yV2B2ugE3dQuyOBqh5XYQuhUIrGFrRA2SjEw5RUtVzjkX6Oov884ip5azcjqY9jAzHD/8th3ZZv6ju+5b/9E4NvrJX1WJ20="
     - stage: "deploy arm"
       arch: arm64
       install: skip
@@ -50,7 +49,7 @@ jobs:
         # workaround arm64: https://travis-ci.community/t/error-occurs-when-deploy-to-github-release-you-dont-have-write-permissions-for-the-var-lib-gems-2-5-0-directory/5840
         - PATH=~/.ruby/bin:$PATH
         - GEM_HOME=~/.ruby
-        - secure: "qbb++AinSY+RZnGbVd+ZXP0n9p6ZeWQfR/3HzkXyFXN4IHn95gqxBYUeTQokEUDBJEnzgO5Ga1xTZbg3kHBe3fou2aP6v3GDLXv9vxQdh5L3iRpHZIjXlkaVQ+B2AzwwPKlMEuF8dPskmPUxUN0YchePPE9S+SCSqt7AmYWbpJlOsTnnQpH8SXx1O8wLNaLOHd/Pew/+Ln35AtH/S1w/0ps+KJtvl8HhTGQwUh6BBGg9yjKSY/VFbMJ5BIkc4UCQmoHvwnmwqwDq0nTUvYEBhjoUCSJQGqEr5dBlKxNmJ07g6kEsplShkilKxlkZTWMlwYp1vq1zjXqT25TqiXXrPVO86lQg0giJ74fzoF3Fx06nXwS3oAuX90vc1GJvI3gbkZQ3Jp0FCQWPWMIoNiDxszp7c6Z1l6Dxe2394Y8RogKPi6DomDFBvspqIdhlCwdQKG71arvtzj/b1xGqSnaTSsmJSOW5Vwumog7cGBH+HW0ZXqduanBjGL7QovBE3FTI4xvsc4RnjejYWhsKH/KF6DjqhVcATk+w4i5s2CpJoCEJTjVKPpNN/0DN8wcBCBLqIMQaL9HsEgpz7HsC9OYpV4kFTDzlH0bbDsBPTgGKu5sHReLzoRiHXZKjNiKK69vwuEjGaCIE8XDlq5k4i3L4eL89rZtzrFHM9eucrfMQvXA="
+        - secure: "LFJ2kLmXM5G8CKbiuRTrLl4ETYByYC0kckwYNYJUBh5WMzOcUbl4TDsFWg+txuZ74O4zkoH4YLDJ8BN++k+iUNfFqEww+BDJRhot+m/ugoJtendSAcjU4uRTOKfyl69zIsG91ePr/nCACx1k2Ux5uYhI+L0lr9r/H8WIWcWc+IJaxTLfN+EOYDx+3R1T54JmsGFObRI/wcEqH0oBPa3aF1Hu1eN7jxAXrUDAtOKuaQ1TRCjRO4V9ZYHiKfSCdb+4XIjMmYAJXlcRYRXMPxj65TfDU7di9fFjaVPNCgiRGwjNhxvvM+3rUkO70+kA+oJ75/i5BT+rslUwYJzSmKOAWtl8hbk60+DpL3eSU7IVwe0prWFovYKLeBH5H5vAQLgOKY2Zf/MpqpKwk4QFwKcHBXlHEe7ZI6uISGhcWFIMb8rqvBhi/sZPP21qvS4uLfRxb1bbqDlB4klSqPTCeQiVdvud5qk/6rBQ4fV9gxqrKOIvtBcAvYzrazpdLdbzQYrfx6uf19v7SRHftX3nEwU9ondFxaSGv2sqabRqIknhxzMw+ztwKeC1VlIfhCJGQXZvB4JTEjftsgOB5cbwi6hELTxWeDlpwpZBPolW257OBiBteyxmj/TZszvXglXz2Z5yHQ5F1X27kX0SZGHQpoefaXCRa7MeU3Gg720mpEVbtHg="
 
     - stage: "deploy amd64 and manifest"
       install: skip
@@ -62,4 +61,4 @@ jobs:
           on:
             all_branches: true
       env:
-        secure: "qbb++AinSY+RZnGbVd+ZXP0n9p6ZeWQfR/3HzkXyFXN4IHn95gqxBYUeTQokEUDBJEnzgO5Ga1xTZbg3kHBe3fou2aP6v3GDLXv9vxQdh5L3iRpHZIjXlkaVQ+B2AzwwPKlMEuF8dPskmPUxUN0YchePPE9S+SCSqt7AmYWbpJlOsTnnQpH8SXx1O8wLNaLOHd/Pew/+Ln35AtH/S1w/0ps+KJtvl8HhTGQwUh6BBGg9yjKSY/VFbMJ5BIkc4UCQmoHvwnmwqwDq0nTUvYEBhjoUCSJQGqEr5dBlKxNmJ07g6kEsplShkilKxlkZTWMlwYp1vq1zjXqT25TqiXXrPVO86lQg0giJ74fzoF3Fx06nXwS3oAuX90vc1GJvI3gbkZQ3Jp0FCQWPWMIoNiDxszp7c6Z1l6Dxe2394Y8RogKPi6DomDFBvspqIdhlCwdQKG71arvtzj/b1xGqSnaTSsmJSOW5Vwumog7cGBH+HW0ZXqduanBjGL7QovBE3FTI4xvsc4RnjejYWhsKH/KF6DjqhVcATk+w4i5s2CpJoCEJTjVKPpNN/0DN8wcBCBLqIMQaL9HsEgpz7HsC9OYpV4kFTDzlH0bbDsBPTgGKu5sHReLzoRiHXZKjNiKK69vwuEjGaCIE8XDlq5k4i3L4eL89rZtzrFHM9eucrfMQvXA="
+        secure: "LFJ2kLmXM5G8CKbiuRTrLl4ETYByYC0kckwYNYJUBh5WMzOcUbl4TDsFWg+txuZ74O4zkoH4YLDJ8BN++k+iUNfFqEww+BDJRhot+m/ugoJtendSAcjU4uRTOKfyl69zIsG91ePr/nCACx1k2Ux5uYhI+L0lr9r/H8WIWcWc+IJaxTLfN+EOYDx+3R1T54JmsGFObRI/wcEqH0oBPa3aF1Hu1eN7jxAXrUDAtOKuaQ1TRCjRO4V9ZYHiKfSCdb+4XIjMmYAJXlcRYRXMPxj65TfDU7di9fFjaVPNCgiRGwjNhxvvM+3rUkO70+kA+oJ75/i5BT+rslUwYJzSmKOAWtl8hbk60+DpL3eSU7IVwe0prWFovYKLeBH5H5vAQLgOKY2Zf/MpqpKwk4QFwKcHBXlHEe7ZI6uISGhcWFIMb8rqvBhi/sZPP21qvS4uLfRxb1bbqDlB4klSqPTCeQiVdvud5qk/6rBQ4fV9gxqrKOIvtBcAvYzrazpdLdbzQYrfx6uf19v7SRHftX3nEwU9ondFxaSGv2sqabRqIknhxzMw+ztwKeC1VlIfhCJGQXZvB4JTEjftsgOB5cbwi6hELTxWeDlpwpZBPolW257OBiBteyxmj/TZszvXglXz2Z5yHQ5F1X27kX0SZGHQpoefaXCRa7MeU3Gg720mpEVbtHg="

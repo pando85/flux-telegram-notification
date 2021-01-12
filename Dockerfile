@@ -1,4 +1,4 @@
-FROM python:3.7-slim-buster AS compile-image
+FROM python:3.9-slim-buster AS compile-image
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
@@ -9,7 +9,7 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir --user -r requirements.txt
 
-FROM python:3.7-slim-buster
+FROM python:3.9-slim-buster
 WORKDIR /usr/src/app
 
 COPY --from=compile-image /root/.local /root/.local

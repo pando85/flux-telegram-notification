@@ -1,44 +1,43 @@
-from typing import Dict, List, NamedTuple, TypeVar, Union
+from typing import Dict, NamedTuple, TypeVar, Union
 
 
 X = TypeVar('X')
 Maybe = Union[X, Exception]
 
-Labels = Dict[str, str]
+Metadata = Dict[str, str]
 Json = Union[dict, list, str]
 
 
-class Alert(NamedTuple):
-    annotations: Labels
-    endsAt: str
-    labels: Labels
-    startsAt: str
-    status: str
-    fingerprint: str = ''
-    generatorURL: str = ''
+class InvolvedObject(NamedTuple):
+    kind: str = ''
+    namespace: str = ''
+    name: str = ''
+    uid: str = ''
+    apiVersion: str = ''
+    resourceVersion: str = ''
+    fieldPath: str = ''
 
 
-class Alerts(NamedTuple):
-    alerts: List[Alert]
-    externalURL: str
-    receiver: str
-    status: str
-    version: str
-    commonAnnotations: Labels = {}
-    commonLabels: Labels = {}
-    groupKey: str = ''
-    groupLabels: Labels = {}
+class Event(NamedTuple):
+    involvedObject: InvolvedObject
+    severity: str
+    timestamp: str
+    message: str
+    reason: str
+    reportingController: str
+    reportingInstance: str = ''
+    metadata: Metadata = {}
 
     @classmethod
     def from_dict(cls, _dict: Dict):
-        alerts = list(map(lambda x: Alert(**x), _dict['alerts']))
-        _dict.pop('alerts')
+        involvedObject = InvolvedObject(**_dict['involvedObject'])
+        _dict.pop('involvedObject')
         return cls(
-            alerts=alerts,
+            involvedObject=involvedObject,
             **_dict
         )
 
     def as_dict(self):
         _dict = self._asdict()
-        _dict['alerts'] = list(map(lambda x: x._asdict(), self.alerts))
+        _dict['involvedObject'] = self.involvedObject._asdict()
         return _dict

@@ -1,12 +1,15 @@
+{# reference: https://github.com/fluxcd/notification-controller/blob/main/internal/notifier/slack.go -#}
 {%- set
   emojis = {
-    'resolved' : '✅',
-    'critical' : '🔴',
-    'severe' : '🔴',
-    'warning' : '⚠️',
-    'unknown' : '⚪️'
+    'info' : '✅',
+    'error' : '🔴',
   }
 -%}
-{{ emojis[alert.status] }} *{{ alert.annotations.summary }}*
-_{{ alert.annotations.description }}_
+{{ emojis[event.severity] }} *{{ event.involvedObject.name }}.{{ event.involvedObject.namespace }}*
+{{ event.message }}
 
+{% for k,v in event.metadata.items() -%}
+*{{ k }}*
+{{ v }}
+
+{% endfor -%}

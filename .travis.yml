@@ -1,64 +1,51 @@
----
-
 os: linux
 dist: xenial
-
 services:
-  - docker
-
+- docker
 language: python
 python:
-  - '3.9'
-
+- '3.9'
 cache: pip
 before_cache:
-  - rm -f $HOME/.cache/pip/log/debug.log
-
-# Only execute travis in master, PR to master or tags
+- rm -f $HOME/.cache/pip/log/debug.log
 branches:
   only:
-    - master
-    - /^[0-9]*\.[0-9]*\.[0-9]*$/
-
+  - master
+  - "/^[0-9]*\\.[0-9]*\\.[0-9]*$/"
 jobs:
   fast_finish: true
   include:
-    - stage: "unit tests"
-      install:
-        - make requirements_test
-      script:
-        - make test
+  - stage: unit tests
+    install:
+    - make requirements_test
+    script:
+    - make test
+  - stage: tag version
+    if: branch = master AND type != pull_request AND tag IS NOT present
+    script:
+    - bash .ci/tag_version.sh
+    env:
+      secure: FVguRdfZcMWN5SQy7/sK/QAXFsErlIfNsU4E0bsKhUBvbLdL2TTZfkudRWx9tYldfZRqnBWgc11+1QN3Hzl813Lutf+IoUQG1HrLcF9xS46qqyz8jOOAfrj7ZS+rx7p8m9QzpLqRW30uzdHKKBGeTxODvM3/mjjDny6DCS6U/1yyUT7juTsc2FImjIP88IKfIx84i8ZIQ6K2Fsb2JYOzxH+dsPxrxvAy6CtAIAkaHFIUuEeVbpbPgdIZBhsaMwuQzFJnsjclm15yiokwAitrOEJ+s/gzyvy0iXUs1rz/G9jaWy/6mjy/gcSKYUOzk7kze+gAlrTEyhzWkkOk8z5K8CV0YKIZLaBZKUUjKi57dosMR/ALSMV3+4n/yD2OcKypQcHIJRiMgt62bW/Zmw0fQhhOCojTxvksvKaG4EJdnZ+F7YOU+2/e1Vc8uYa3JZl5473s03pE9celr6wLEUgrAXD4APRIyoH/8olcJIdZAUQ6sFiQa9okSgB9rSniz3Rc/S+bYThiL5/zZstJXjdS1+YJk9iDfB3JqidMK7IXZvTj8H9ywGeIsifM/Heo73Wqba7QjtMWWuI0yV2B2ugE3dQuyOBqh5XYQuhUIrGFrRA2SjEw5RUtVzjkX6Oov884ip5azcjqY9jAzHD/8th3ZZv6ju+5b/9E4NvrJX1WJ20=
+  - stage: deploy arm
+    arch: arm64
+    install: skip
+    script: skip
+    if: type != pull_request
+    deploy:
+    - provider: script
+      script: bash .ci/deploy.sh
+      on:
+        all_branches: true
+    env:
+    - PATH=~/.ruby/bin:$PATH
+    - GEM_HOME=~/.ruby
 
-    - stage: "tag version"
-      if: branch = master AND type != pull_request AND tag IS NOT present
-      script:
-        - bash .ci/tag_version.sh
-      env:
-        secure: "FVguRdfZcMWN5SQy7/sK/QAXFsErlIfNsU4E0bsKhUBvbLdL2TTZfkudRWx9tYldfZRqnBWgc11+1QN3Hzl813Lutf+IoUQG1HrLcF9xS46qqyz8jOOAfrj7ZS+rx7p8m9QzpLqRW30uzdHKKBGeTxODvM3/mjjDny6DCS6U/1yyUT7juTsc2FImjIP88IKfIx84i8ZIQ6K2Fsb2JYOzxH+dsPxrxvAy6CtAIAkaHFIUuEeVbpbPgdIZBhsaMwuQzFJnsjclm15yiokwAitrOEJ+s/gzyvy0iXUs1rz/G9jaWy/6mjy/gcSKYUOzk7kze+gAlrTEyhzWkkOk8z5K8CV0YKIZLaBZKUUjKi57dosMR/ALSMV3+4n/yD2OcKypQcHIJRiMgt62bW/Zmw0fQhhOCojTxvksvKaG4EJdnZ+F7YOU+2/e1Vc8uYa3JZl5473s03pE9celr6wLEUgrAXD4APRIyoH/8olcJIdZAUQ6sFiQa9okSgB9rSniz3Rc/S+bYThiL5/zZstJXjdS1+YJk9iDfB3JqidMK7IXZvTj8H9ywGeIsifM/Heo73Wqba7QjtMWWuI0yV2B2ugE3dQuyOBqh5XYQuhUIrGFrRA2SjEw5RUtVzjkX6Oov884ip5azcjqY9jAzHD/8th3ZZv6ju+5b/9E4NvrJX1WJ20="
-    - stage: "deploy arm"
-      arch: arm64
-      install: skip
-      script: skip
-      if: type != pull_request
-      deploy:
-        - provider: script
-          script: bash .ci/deploy.sh
-          on:
-            all_branches: true
-      env:
-        # workaround arm64: https://travis-ci.community/t/error-occurs-when-deploy-to-github-release-you-dont-have-write-permissions-for-the-var-lib-gems-2-5-0-directory/5840
-        - PATH=~/.ruby/bin:$PATH
-        - GEM_HOME=~/.ruby
-        - secure: "LFJ2kLmXM5G8CKbiuRTrLl4ETYByYC0kckwYNYJUBh5WMzOcUbl4TDsFWg+txuZ74O4zkoH4YLDJ8BN++k+iUNfFqEww+BDJRhot+m/ugoJtendSAcjU4uRTOKfyl69zIsG91ePr/nCACx1k2Ux5uYhI+L0lr9r/H8WIWcWc+IJaxTLfN+EOYDx+3R1T54JmsGFObRI/wcEqH0oBPa3aF1Hu1eN7jxAXrUDAtOKuaQ1TRCjRO4V9ZYHiKfSCdb+4XIjMmYAJXlcRYRXMPxj65TfDU7di9fFjaVPNCgiRGwjNhxvvM+3rUkO70+kA+oJ75/i5BT+rslUwYJzSmKOAWtl8hbk60+DpL3eSU7IVwe0prWFovYKLeBH5H5vAQLgOKY2Zf/MpqpKwk4QFwKcHBXlHEe7ZI6uISGhcWFIMb8rqvBhi/sZPP21qvS4uLfRxb1bbqDlB4klSqPTCeQiVdvud5qk/6rBQ4fV9gxqrKOIvtBcAvYzrazpdLdbzQYrfx6uf19v7SRHftX3nEwU9ondFxaSGv2sqabRqIknhxzMw+ztwKeC1VlIfhCJGQXZvB4JTEjftsgOB5cbwi6hELTxWeDlpwpZBPolW257OBiBteyxmj/TZszvXglXz2Z5yHQ5F1X27kX0SZGHQpoefaXCRa7MeU3Gg720mpEVbtHg="
-
-    - stage: "deploy amd64 and manifest"
-      install: skip
-      script: skip
-      if: type != pull_request
-      deploy:
-        - provider: script
-          script: bash .ci/deploy.sh
-          on:
-            all_branches: true
-      env:
-        secure: "LFJ2kLmXM5G8CKbiuRTrLl4ETYByYC0kckwYNYJUBh5WMzOcUbl4TDsFWg+txuZ74O4zkoH4YLDJ8BN++k+iUNfFqEww+BDJRhot+m/ugoJtendSAcjU4uRTOKfyl69zIsG91ePr/nCACx1k2Ux5uYhI+L0lr9r/H8WIWcWc+IJaxTLfN+EOYDx+3R1T54JmsGFObRI/wcEqH0oBPa3aF1Hu1eN7jxAXrUDAtOKuaQ1TRCjRO4V9ZYHiKfSCdb+4XIjMmYAJXlcRYRXMPxj65TfDU7di9fFjaVPNCgiRGwjNhxvvM+3rUkO70+kA+oJ75/i5BT+rslUwYJzSmKOAWtl8hbk60+DpL3eSU7IVwe0prWFovYKLeBH5H5vAQLgOKY2Zf/MpqpKwk4QFwKcHBXlHEe7ZI6uISGhcWFIMb8rqvBhi/sZPP21qvS4uLfRxb1bbqDlB4klSqPTCeQiVdvud5qk/6rBQ4fV9gxqrKOIvtBcAvYzrazpdLdbzQYrfx6uf19v7SRHftX3nEwU9ondFxaSGv2sqabRqIknhxzMw+ztwKeC1VlIfhCJGQXZvB4JTEjftsgOB5cbwi6hELTxWeDlpwpZBPolW257OBiBteyxmj/TZszvXglXz2Z5yHQ5F1X27kX0SZGHQpoefaXCRa7MeU3Gg720mpEVbtHg="
+  - stage: deploy amd64 and manifest
+    install: skip
+    script: skip
+    if: type != pull_request
+    deploy:
+    - provider: script
+      script: bash .ci/deploy.sh
+      on:
+        all_branches: true

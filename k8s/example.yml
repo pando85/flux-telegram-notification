@@ -4,28 +4,22 @@ data:
   message.j2: |
     {%- set
       emojis = {
-        'resolved' : '✅',
-        'critical' : '🔴',
-        'severe' : '🔴',
-        'warning' : '⚠️',
-        'unknown' : '⚪️'
+        'info' : '✅',
+        'error' : '🔴',
       }
     -%}
-    {%- if alert.status == 'resolved' -%}
-    {{ emojis[alert.status] }}
-    {%- else -%}
-    {{ emojis[alert.labels.severity] }}
-    {%- endif -%}
-     *{{ alert.labels.alertname }}*
-    _{{ alert.annotations.message }}_
-    [Prometheus]({{ alert.generatorURL }})
-    {% if 'runbook_url' in alert.annotations -%}
-    [Runbook URL]({{ alert.annotations.runbook_url }})
-    {%- endif -%}
+    {{ emojis[event.severity] }} *{{ event.involvedObject.name }}.{{ event.involvedObject.namespace }}*
+    {{ event.message }}
+
+    {% for k,v in event.metadata.items() -%}
+    *{{ k }}*
+    {{ v }}
+
+    {% endfor -%}
 kind: ConfigMap
 metadata:
   name: flux-telegram-notification
-  namespace: monitoring
+  namespace: flux-system
 
 ---
 apiVersion: v1
@@ -34,18 +28,16 @@ data:
 kind: Secret
 metadata:
   name: telegram-bot
-  namespace: monitoring
+  namespace: flux-system
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    prometheus.io/scrape: 'true'
   labels:
     app: flux-telegram-notification
   name: flux-telegram-notification
-  namespace: monitoring
+  namespace: flux-system
 spec:
   ports:
   - name: flux-telegram-notification
@@ -57,13 +49,16 @@ spec:
 
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flux-telegram-notification
-  namespace: monitoring
+  namespace: flux-system
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: flux-telegram-notification
   template:
     metadata:
       name: flux-telegram-notification

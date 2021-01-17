@@ -1,11 +1,13 @@
 from aiohttp.web import Response, json_response
 
 from forwarder.typing import Maybe
-from forwarder.errors import ResponseError
+from forwarder.errors import FilteredEvent, ResponseError
 
 
 def return_error(error: Exception) -> Response:
     if isinstance(error, ResponseError):
+        return json_response(error.message, status=error.status_code)
+    if isinstance(error, FilteredEvent):
         return json_response(error.message, status=error.status_code)
     return json_response('Unknow error', status=500)
 

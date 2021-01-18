@@ -9,7 +9,8 @@ Flux notification webhook to forward notifications to Telegram using templates a
 |`API_SPECS_PATH`| OpenAPI specs path | `docs/api/v1/openapi.yaml` |
 |`LOG_LEVEL`| Log level: `[DEBUG, INFO, WARNING, ERROR, CRITICAL]`| `INFO` |
 |`TELEGRAM_BOT_TOKEN`| Telegram bot token | `` |
-|`TEMPLATE_PATH`| Jinja2 template used to forward messages | | `forwarder/resources/templates/default.j2` |
+|`TEMPLATE_PATH`| Jinja2 template used to forward messages | `forwarder/resources/templates/default.j2` |
+|`FILTER_EXPRESION`| Python code to filter event object when it returns true | `"commit_status" in event.metadata and event.metadata["commit_status"] == "update"` |
 
 ### Alertmanager
 
